@@ -1,1 +1,5 @@
-# Palestra_Visual_de_Dados_com_R
+# Palestra de Visualização de Dados com o R
+
+## DMQ/UNIRIO
+
+prof. Steven Dutt Ross 

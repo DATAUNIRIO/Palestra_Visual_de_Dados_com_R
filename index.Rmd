@@ -1,0 +1,1140 @@
+---
+title: "Introdução à Ciência de Dados com o R"
+subtitle: "#Use R!"
+author: "Steven Dutt Ross"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+library(highcharter)
+library(dplyr)
+library(viridis)
+library(ggplot2)
+```
+
+
+## Por que usar o R?
+<P>1 . O R é a **principal** ferramenta para análise de dados. É mais do que um software estatístico, é uma linguagem de programação.
+<P>2. Você pode usá-lo **facilmente** em qualquer lugar.
+<P>3. **É grátis.** Você pode usa-lo em qualquer empresa, escola, em qualquer local sem ter que convencer o chefe a comprar uma licença.
+<P>4. Existem **mais de 10.000 pacotes com contribuições** de usuários disponíveis no site do R (cran). Muitos pacotes  são colocados pelos pesquisadores mais proeminentes de seus respectivos campos de estudo.
+<P>5. R tem uma **grande (e crescente) comunidade de usuários**. As listas de discussões fornecem acesso a muitos usuários e autores de pacotes que são especialistas em  seus campos.
+<BR>
+<P>OBS - Essa apresentação foi desenvolvida em R
+
+---
+
+## Por que usar o R?
+
+```{r, echo=FALSE, fig.height=5, fig.width=10}
+library(png)
+library(grid)
+img <- readPNG("C:/Users/Hp/Desktop/R/Apresentacoes/Companies using R.png")
+#img <- readPNG("C:/Users/Steven/Google Drive/google maps e R/R Markdown/Slidify/teste 1/teste/Companies using R.png")
+ grid.raster(img)
+#![] (https://1.bp.blogspot.com/-CytixCJHq6w/WGOlcgvciDI/AAAAAAAAFvY/TkNVgC_bA5oEHutbmETCOXnxmzsaOJDzwCLcB/s1600/Companies%2Busing%2BR.png)
+#![] (C:/Users/Steven/Google Drive/google maps e R/R Markdown/Slidify/teste 1/teste/Companies using R.png)
+#![](/Companies using R.png =1000x200)
+#<img src="Companies using R.png" width="1000px" height="200px" />
+```
+<BR>
+Outras organizações que utilizam o R: IBGE, FGV, IBOPE, Ministério da
+Indústria, Comércio Exterior e Serviços, etc...
+
+---
+
+## Grandes organizações que usam o R
+1. Facebook - For behavior analysis related to status updates and profile pictures.
+2. Google - For advertising effectiveness and economic forecasting.
+3. Twitter - For data visualization and semantic clustering
+4. Microsoft - Acquired Revolution R company and use it for a variety of purposes.
+5. Uber - For statistical analysis
+6. Airbnb - Scale data science.
+7. IBM - Joined R Consortium Group
+8. ANZ - For credit risk modeling   
+9. HP
+10. Ford
+11. Roche
+12. New York Times - For data visualization
+13. Mckinsey
+- [Fonte](http://www.listendata.com/2016/12/companies-using-r.html?m=1)
+
+---
+
+## Por que usar o R?
+<BR>
+COMEX-VIS do Ministério da Indústria,Comércio Exterior e Serviços
+
+```{r, echo=FALSE, fig.height=5, fig.width=10}
+imgcomexvis <- readPNG("C:/Users/Hp/Documents/GitHub/TesouroNacional/ComexVis.png")
+grid.raster(imgcomexvis)
+
+```
+![ComexVis] (http://www.mdic.gov.br/comercio-exterior/estatisticas-de-comercio-exterior/comex-vis) foi desenvolvido em R
+
+---
+
+## R nas melhores revistas científicas
+```{r, echo=FALSE, fig.height=5, fig.width=10}
+library(png)
+library(grid)
+img11 <- readPNG("C:/Users/Hp/Documents/GitHub/aulaunirio.github.io/R em Revistas Científicas.png")
+ grid.raster(img11)
+```
+[Fonte](http://estatisticacomr.com.br/r-nas-revistas-cientificas/)
+
+---
+
+## Número de pacotes do R ao longo do tempo
+
+Pacotes (package) são bibliotecas gratuitas de código escritas pelos usuários e desenvolvedores do R. Muitas funções específicas do R vêm em pacotes.
+```{r, echo=FALSE, fig.height=5, fig.width=10}
+library(png)
+library(grid)
+img1 <- readPNG("C:/Users/Hp/Desktop/R/Apresentacoes/CRAN Packages.png")
+#img1 <- readPNG("C:/Users/Steven/Google Drive/google maps e R/R Markdown/Slidify/teste 1/teste/CRAN Packages.png")
+grid.raster(img1)
+#![](https://2.bp.blogspot.com/-_g4B3uM17hY/WGJpUaiypHI/AAAAAAAAFvI/1TSwAEw1vtUBG8trJinfc2grhmeXiwFdgCLcB/s1600/CRAN%2BPackages.png)
+```
+
+---
+
+## Análises Desenvolvidas pelo R
+
+[Transparência](https://duttross.shinyapps.io/transparencia1/)
+
+[Engajamento Orçamentário](https://duttross.shinyapps.io/Engajamento/)
+
+[Mapa da Rocinha](https://dataunirio.github.io/Rocinha/)
+
+[Unirio em números](http://rpubs.com/StevenDuttRoss/unirioemnumeros)
+
+[Gráfico Interativo DATAUNIRIO](https://dataunirio.github.io/streetview/)
+
+[Gráfico Interativo GAE](http://gae.uniriotec.br/4/visualizacao.html)
+
+
+Pessoalmente, tenho grande experiência com programação SPSS, SAS, Excel/VBA, mas acabei trocando todas essas ferramentas pelo R.
+
+---
+
+## Entender não basta 
+Ideia: Quero desenvolver essas análises.
+```{r, echo=FALSE, fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(ggthemes)
+df <- read.csv("buzzfeed_linkbait_headlines.csv", header=T)
+ggplot(df, aes(x=listicle_size, y=num_fb_shares)) +
+    geom_point(alpha=0.05, color="#c0392b") +
+    scale_x_continuous(breaks=seq(0,50, by=5)) +
+    scale_y_log10(breaks=10^(0:6)) +
+    geom_hline(yintercept=1, size=0.4, color="black") +
+    geom_smooth(alpha=0.25, color="black", fill="black") +
+    labs(x="Num de palavras da publicação", y="Num de compartilhamentos no Facebook", title="Facebook vs. Tamanho da publicação")
+
+```
+
+
+---
+
+## Estatística/Data Science 
+### Estatística como ciência do aprendizado
+1. Estatística é a ciência do aprendizado a partir dos dados
+
+---
+
+## Estatística/Data Science 
+### Estatística como ciência do aprendizado
+1. Estatística é a ciência do aprendizado a partir dos dados
+2. Sempre olhe os dados: A procedência dos dados é importante
+
+---
+
+## Estatística/Data Science  
+### Estatística como ciência do aprendizado
+1. Estatística é a ciência do aprendizado a partir dos dados
+2. Sempre olhe os dados: A procedência dos dados é importante
+3. A variação está em toda parte
+
+---
+
+## Estatística/Data Science   
+### Estatística como ciência do aprendizado
+1. Estatística é a ciência do aprendizado a partir dos dados
+2. Sempre olhe os dados: A procedência dos dados é importante
+3. A variação está em toda parte
+
+### Aplicação de conceitos
+A ênfase será na compreensão e aplicação de conceitos e técnicas, em vez da demonstração de teoremas. O curso é baseado na aplicação prática usando a linguagem computacional R.
+
+---
+
+## Registros e variáveis 
+
+Os registros são objetos descritos por um conjunto de dados, podendo ser pessoas, animais, municípios, estados ou objetos.
+
+Uma variável é qualquer característica do registro. Uma variável pode assumir valores diferentes para registros diferentes.
+
+---
+
+## Variáveis qualitativas e quantitativas
+
+Variável qualitativa **Nominal** não existe hierarquia/ordenação entre as categorias. Exemplos: *sexo, cor, bairro, fumante/não fumante, doente/sadio*.
+
+Variável qualitativa **Ordinal** existe uma hierarquia/ordenação entre as categorias. Exemplos: *escolaridade (1o, 2o, 3o graus), patente militar (soldado, cabo, sargento), avaliação (péssimo, ruim, regular, bom, ótimo)*
+
+Variável quantitativa **Discreta** características mensuráveis que podem assumir apenas um número finito ou infinito contável de valores e, assim, somente fazem sentido valores inteiros. Geralmente são o resultado de contagens. Exemplos: *número de filhos, número de pessoas na família, número de cigarros fumados por dia.*
+
+Variável quantitativa **Contínua** características mensuráveis que assumem valores em uma escala contínua, para as quais valores fracionais fazem sentido. Exemplos: *renda, preço, peso, altura, tempo.*
+
+- [Fonte](http://leg.ufpr.br/~silvia/CE055/node8.html)
+
+
+---
+
+## Banco de Dados: Swiss Data
+Províncias da Suiça
+```{r swiss, eval=require('DT'), tidy=FALSE, echo=FALSE}
+data("swiss")
+DT::datatable(
+  head(swiss, 10),
+  fillContainer = FALSE, options = list(pageLength = 5))
+#Standardized fertility measure and socio-economic indicators for each of 47 French-speaking provinces of Switzerland at about 1888.
+#Fertility	Ig, ‘common standardized fertility measure’
+#Agriculture	 % of males involved in agriculture as occupation
+#Examination	 % draftees receiving highest mark on army examination
+#Education	 % education beyond primary school for draftees.
+#Catholic	 % ‘catholic’ (as opposed to ‘protestant’).
+#Infant.Mortality	 live births who live less than 1 year.
+```
+
+---
+
+## Banco de Dados: Midwest Data
+Informações Demográficas dos municípios do Meio-Oeste
+```{r midwest, echo=FALSE}
+data(midwest)
+dim(midwest)
+DT::datatable(
+  head(midwest, 10),
+  fillContainer = FALSE, options = list(pageLength = 5))
+
+```
+
+---
+
+## Banco de Dados: Mtcars Data
+Performance de carros (10 informações)
+```{r, echo=FALSE}
+DT::datatable(
+  head(mtcars, 10),
+  fillContainer = FALSE, options = list(pageLength = 5))
+```
+
+---
+
+## Geralmente acompanhado de um DICIONÁRIO DE DADOS
+Por exemplo:
+* mpg: Miles/(US) gallon
+* cyl: Number of cylinders
+* disp: Displacement (cu.in.)
+* hp: Gross horsepower
+* drat:Rear axle ratio
+* wt: Weight (1000 lbs)
+* qsec: 1/4 mile time
+* vs: V/S
+* am: Transmission (0 = automatic, 1 = manual)
+* gear: Number of forward gears
+* carb: Number of carburetors
+
+---
+
+Por exemplo, esse banco de dados tem 32 carros e 11 variáveis. No R isso pode ser verificado pelo comando dim(mtcars), e names(mtcars)
+```{r, echo=TRUE}
+dim(mtcars)
+names(mtcars)
+```
+
+---
+
+## O objetivo é extrair informações de um banco de dados
+Por exemplo:
+Valor médio das variáveis HP & mpg e tabela dos CyL dos carros desse banco de dados
+```{r, echo=FALSE}
+mean(mtcars$hp)
+mean(mtcars$mpg)
+table(mtcars$cyl)
+
+```
+
+---
+
+## Outro modo de fazer isso é por meio de gráficos
+```{r, echo=FALSE}
+library(ggplot2)
+qplot(wt, mpg, data = mtcars)
+```
+
+---
+
+## Atribuir um objeto no R
+
+O R é uma linguagem orientada a objetos que permite a manipulação e a análise de dados.
+
+AA <- 5 <br>
+BB <- 7 <br>
+CC <- AA^2 <br>
+DD <-AA+BB <br>
+
+---
+
+## Criando vetores
+
+O comando c() pode ser usada para criar vetores de objetos juntando os registros.
+
+```{r vetor}
+x <- c(0.3, 0.9, 7.1)          ## numerico
+y <- c(TRUE, FALSE, FALSE)     ## logico
+y <- c(T, F, F)                ## logico
+z <- c("a", "b", "c")          ## caracter
+w <- 10:20                     ## inteiro
+k <- c(1+9i, 2+4i, 8+2i)       ## complexo
+l <- c("red","blue","green")   ## cores
+n<-as.Date(c('03/7/2017','04/7/2017','05/7/2017'),format='%d/%m/%Y')
+```
+
+---
+
+## Data.Frame: O banco de dados no R
+
+Podemos utilizar mais informações do que apenas dados de uma mesma classe, como um vetor ou uma matriz. Uma base de dados, em geral, é feita de dados de diversas classes diferentes.
+
+Como guardar informações de diversas classes diferentes? A resposta para isso é o data.frame. Por exemplo, se eu tivesse um departamento de uma empresa com esses funcionarios:
+
+```{r, echo=TRUE}
+Funcionarios <- data.frame(nome = c("Marx", "Weber", "Durkheim","Arendt", "Maquiavel"),
+                           sexo = c("M", "M", "M", "F","M"),
+                           salario = c(1000, 1200, 1300, 2000, 500),                                  stringsAsFactors = FALSE)
+Funcionarios
+```
+
+---
+
+## Data.Frame: O banco de dados no R
+Outro exemplo. Um Data.Frame de uma turma com esses alunos:
+```{r turma, echo=TRUE}
+Turma <- data.frame(nome_aluno = c("Jurgen Habermas", "Karl Popper", "John Rawls","Paulo Freire"),
+                           sexo = c("M", "M", "M","M"),
+                           CR = c(6.98, 7.01, 7.03, 8.88), stringsAsFactors = FALSE)
+Turma
+```
+
+---
+
+## Data.Frame: O banco de dados no R
+Para desenvolver um banco de dados a partir do SIAFI/SICONV/SIAFEM:
+
+```{r SIAFI, echo=TRUE}
+SIAFI <- data.frame(Municipio = c("Rio de Janeiro", "Belo Horizonte", "Porto Alegre","Olinda"),
+        Capital = c("Sim", "Sim", "Sim","Não"),
+        Divida_Uniao = c(1273.12, 2457.21, 989.03, 472.88), stringsAsFactors = FALSE)
+SIAFI
+```
+
+
+---
+
+## Data.Frame: O banco de dados no R
+
+Para selecionar colunas em um data.frame é utilizado o **simbolo $ **
+
+```{r}
+Funcionarios$nome
+Turma$nome_aluno
+SIAFI$Municipio
+
+```
+
+
+---
+
+## Exploração dos dados
+
+1. Inicie pelo exame de cada variável por si mesma. Em seguida, estude as relações entre essas variáveis.
+<p> 
+2. Sugestão: Tente fazer duas ações. 1) Inicie pelo gráfico. 2) Adicione então resumos numéricos (exemplo média, moda, mediana) de aspectos específicos dos dados.
+
+## Distribuição de uma variável
+
+* A Distribuição de uma variável nos diz quais os valores assumidos por ela e qual a frequência com que ela os assume.
+
+*  Os valores de uma variável categórica são rótulos para as categorias. A distribuição de uma variável categorica lista as categorias e dá a contagem e o percentual de registros que estão em cada uma delas.
+
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## Distribuição de uma variável quantitativa
+
+---
+
+## Distribuição de uma variável quantitativa
+variáveis quantitativas geralmente assumem muitos valores. A distribuição nos diz quais valores ela assume e com qual frequência os assume. O gráfico da distribuição torna-se mais claro se agrupamos valores próximos. O gráfico mais comum da distribuição de uma variável quantitativa é o **histograma**.
+
+```{r hist, echo=FALSE, fig.height=4, fig.width=6}
+hist(mtcars$hp, col="red", main = "Histograma do HP")
+```
+
+---
+
+## Análise de um histograma
+
+1. Em qualquer gráfico de dados, procure pelo **padrão geral** e por **desvios** notáveis desse padrão.
+2. Você pode descrever o padrão geral de um histograma por sua ** forma, centro e dispersão.**
+Um tipo importante de desvio é o **outlier** (valor atípico), um valor individual que está fora do padrão geral.
+
+---
+
+## Medida de centro: média, mediana, moda
+Relembrando...
+A Média é a soma de todos os valores de um conjunto de observações dividido pelo número de observações.
+
+```
+
+```
+
+$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+
+A Mediana (Md) é o ponto no meio de uma distribuição, o número tal que metade das observações é menor que ele e metade , maior.
+<p>
+A Moda é a observação que mais se repete.
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## R: Média, mediana e moda
+
+---
+
+## Uso do R para calcular as medidas de centro: média, mediana, moda
+Quando a  Mediana é melhor do que a média para representar o centro de um conjunto de dados? Para responder isso, vamos criar dois vetores no R:
+<p> 
+vetor1<- c(1,2,3,4,5)
+e 
+<p> vetor2<- c(1,2,3,4,50000) 
+
+---
+
+## Uso do R para calcular as medidas de centro: média, mediana, moda
+Quando a  Mediana é melhor do que a média para representar o centro de um conjunto de dados?
+Agora vamos calcular a média e a mediana desses vetores.
+```{r mean, echo=TRUE}
+vetor1<- c(1,2,3,4,5)
+vetor2<- c(1,2,3,4,50000) 
+mean(vetor1)
+mean(vetor2)
+median(vetor1)
+median(vetor2)
+
+```
+
+---
+
+## Para calcular os quartis 
+1. Ordene as observações em ordem crescente e localize a mediana.
+2. O **primeiro quartil Q1** é a mediana das observações localizadas a esquerda da mediana 
+3. O **terceiro quartil Q3** é a mediana das observações localizadas a direita da mediana
+
+---
+
+## O resumo dos cinco números no R
+O resumo dos cinco números consiste: 1) no menor valor, 2)  no primeiro quartil, 3)  na mediana, 4) no terceiro quartil e  5) no maior valor. Estes cinco números oferecem uma descrição razoavelmente completa do cento e da dispersão dos dados. No R podemos obter esse resumo com o comando **summary(objeto)**
+
+```{r quartil, echo=TRUE}
+summary(vetor1)
+summary(vetor2)
+
+```
+
+
+---
+
+## O resumo dos cinco números no R
+O resumo dos cinco números para a variável HP (horsepower) do banco de dados mtcars no R.
+
+```{r quartil1, echo=TRUE}
+summary(mtcars$hp)
+```
+
+O resumo dos cinco números para a variável MPG do banco de dados Mtcars
+```{r quartil2, echo=TRUE}
+summary(mtcars$mpg)
+```
+
+O resumo dos cinco números para a variável Divida_Uniao do data.frame SIAFI
+
+```{r quartil3, echo=TRUE}
+summary(SIAFI$Divida_Uniao)
+```
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## O Box-Plot no R
+
+---
+
+### O BOX PLOT
+```{r quartil4, echo=FALSE, fig.height=6, fig.width=8}
+boxplot(mtcars$hp, col="royalblue")
+```
+
+---
+
+### O BOX PLOT
+O Box-Plot é o gráfico do resumo dos cinco números.
+1. A caixa central abarca os quartis Q1 e Q3.
+2. Uma linha central marca a mediana.
+3. Linhas se estendem da caixa até o menor e o maior valor
+
+
+---
+
+### O BOX PLOT
+A Amplitude interquartil AIQ é a distância entre o primeiro e o terceiro quartil
+
+```{r quartil5, echo=FALSE, fig.height=6, fig.width=8, warning=FALSE, message=FALSE}
+a<-rnorm(1000, 50, 10) 
+b<-rnorm(1000, 50, 30) 
+c<-rep("a",1000)
+d<-rep("b",1000)
+e<-data.frame(a,b,c,d)
+suppressWarnings(library(reshape))
+mdata <- melt(e, id=c("c","d"))
+boxplot(mdata$value ~ mdata$variable, col=c("tomato","royalblue"),data=mdata)
+```
+
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+Para mostrar a variância e o Desvio Padrão, vamos criar quatro conjuntos de dados hipotéticos 
+```{r variancia, echo=TRUE}
+conjunto1<-c(4,4,4,10,16,16,16)
+conjunto2<-c(4,6,8,10,12,14,16)
+conjunto3<-c(7,8,9,10,11,12,13)
+conjunto4<-c(10,10,10,10,10,10,10)
+```
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+```{r variancia2, echo=TRUE}
+conjunto1<-c(4,4,4,10,16,16,16)
+conjunto2<-c(4,6,8,10,12,14,16)
+conjunto3<-c(7,8,9,10,11,12,13)
+conjunto4<-c(10,10,10,10,10,10,10)
+```
+Vamos agora calcular a média desses quatro conjuntos de dados
+```{r variancia3, echo=TRUE}
+mean(conjunto1)
+mean(conjunto2)
+mean(conjunto3)
+mean(conjunto4)
+```
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+Vamos olhar esses conjuntos graficamente. Para isso, vou construir um eixo auxiliar.
+```{r variancia4, echo=TRUE, eval=FALSE}
+eixo1<-c(1,1,1,1,1,1,1)
+eixo2<-c(2,2,2,2,2,2,2)
+eixo3<-c(3,3,3,3,3,3,3)
+eixo4<-c(4,4,4,4,4,4,4)
+plot(conjunto1,eixo1, col="red",ylim=c(0,5),pch=16, main = "Quatro conjuntos de dados",ylab="conjuntos", xlab="valores")
+points(conjunto2,eixo2, col="blue",pch=16)
+points(conjunto3,eixo3, col="green",pch=16)
+points(conjunto4,eixo4, col="black",pch=16)
+```
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+```{r variancia5, echo=FALSE}
+eixo1<-c(1,1,1,1,1,1,1)
+eixo2<-c(2,2,2,2,2,2,2)
+eixo3<-c(3,3,3,3,3,3,3)
+eixo4<-c(4,4,4,4,4,4,4)
+plot(conjunto1,eixo1, col="red",ylim=c(0,5),pch=16, main = "Quatro conjuntos de dados",ylab="conjuntos", xlab="valores",cex=3)
+points(conjunto2,eixo2, col="blue",pch=16,cex=3)
+points(conjunto3,eixo3, col="green",pch=16,cex=3)
+points(conjunto4,eixo4, col="black",pch=16,cex=3)
+
+#variancia populacional $$\sigma^2 = \frac{\sum_{i=1}^{n}(x_i - \mu)^2} {n}$$
+```
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+
+* Apesar de terem a mesma média, os conjuntos de dados são diferentes.
+* A dispersão dos pontos é diferente em cada conjunto
+* O conjunto 2 tem um espalhamento maior que o conjunto 3.
+* O conjunto 1 é aquele em que há  maior dispersão em torno da média
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+A variância
+
+```
+
+```
+
+$$S^2 = \frac{\sum_{i=1}^{n}(x_i - \bar{X})^2} {n-1}$$
+
+
+O Desvio padrão
+
+$$S = \sqrt{\frac{\sum_{i=1}^{n}(x_i - \bar{X})^2} {n-1}}$$
+Ou simplesmente: 
+
+$$S = \sqrt{S^2}$$
+
+
+---
+
+## Medidas de dispersão no R: Variância e Desvio Padrão
+Para fazer o desvio padrão no R você precisa escrever **sd(nome do conjunto)** 
+sd =  Standard Deviation (Desvio Padrão em inglês)
+```{r variancia6, echo=TRUE}
+sd(conjunto1)
+sd(conjunto2)
+sd(conjunto3)
+sd(conjunto4)
+```
+
+---
+
+## O Diagrama de dispersão
+
+O Diagrama de Dispersão é um gráfico onde pontos no espaço cartesiano (X,Y) são usados para representar simultaneamente os valores de duas variáveis quantitativas medidas em cada elemento do conjunto de dados.
+
+---
+
+```{r dispe, echo=TRUE}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)  #criando um vetor qualquer 
+y <- c(100, 200,300,400,500,600, 700, 800, 900, 1000) #criando outro vetor
+plot(x,y, col = "red", lwd = 10) #desenhando um gráfico de dispersão
+```
+
+---
+
+```{r dispe1, echo=TRUE}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)  #criando um vetor qualquer 
+y <- c(210, 50,280,400,590,540, 730, 770, 800, 1100) #criando outro vetor
+plot(x,y, col = "blue", lwd = 10) #desenhando um gráfico de dispersão
+```
+
+---
+
+```{r idade, echo=TRUE, results="hide"}
+idade = c(56, 30, 40, 32, 39, 23, 17, 20, 28, 16)
+metabolismo = c(17, 29, 27, 35, 27, 56, 58, 54, 50, 38)
+datacor = data.frame(metabolismo,idade)
+datacor
+```
+
+---
+
+```{r idade2, echo=FALSE}
+idade = c(56, 30, 40, 32, 39, 23, 17, 20, 28, 16)
+metabolismo = c(17, 29, 27, 35, 27, 56, 58, 54, 50, 38)
+datacor = data.frame(metabolismo,idade)
+datacor
+```
+
+---
+
+Este diagrama de dispersão tem um padrão linear geral (reta).
+
+```{r idade3, echo=FALSE}
+plot(datacor$idade, datacor$metabolismo)
+```
+
+---
+
+Essa padrão linear é facil de ver.
+```{r idade4, echo=FALSE}
+plot(datacor$idade, datacor$metabolismo)
+abline(lsfit(datacor$idade, datacor$metabolismo),col="darkred")
+```
+
+---
+
+```{r aborto, echo=TRUE}
+penademorte <- c(7,7,3,0,0,10,5,7,0,10,1,8,1,9,8,8,4,10,10,9)
+aborto      <- c(1,2,7,7,9, 3,9,5,8,4,10,3,9,2,2,6,8,6,6,8)
+plot(penademorte,aborto)
+abline(lsfit(penademorte,aborto),col="darkred")
+```
+
+---
+
+Padrão linear positivo, padrão linear negativo, sem padrão linear (padrão nulo)? 
+```{r tipo, echo=FALSE}
+V1 = c(10, 13, 14, 11, 10, 17, 10, 7, 12, 13)
+V2 = c(11, 11, 14, 9, 7, 14, 9, 4, 13, 12)
+V3 = c(3, 20, 27, 26, 16, 11, 34, 13, 31, 18)
+V4 = c(10,2,  1, 2, 5, 6, 0, 4, 1, 8)
+dados.v = data.frame(V1,V2,V3,V4)
+pairs(dados.v)
+```
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## Correlação no R
+
+---
+
+## O que é correlação?
+
+A Correlação mede a **direção** (positivas ou negativas) e a **intensidade** (força) da relação linear entre duas variáveis quantitativas (relacionamento entre duas variáveis). Costuma-se representar a correlação pela letra *r*.
+
+---
+
+## Fatos sobre a correlação 
+
+<p> **A correlação não faz distinção entre variável explicativa e variável resposta** Não faz diferença alguma qual variável você chama de *x* e qual você chama de *y*, ao calcular a correlação.
+<p> 
+<p> **r positivo indica uma associação positiva entre as variáveis**, e r negativo indica uma associação negativa.
+<p> 
+<p> **A correlação *r* é sempre um número entre -1 e 1.** Valores próximos de zero indicam uma relação linear muito fraca. A intensidade da relação linear cresce, à medida que *r* se afasta de zero em direção a -1 ou 1. Os valores de *r* próximos de -1 ou 1 indicam que os pontos num diagrama de dispersão caem próximos de uma reta. Os valores extremos *r= -1* e *r= 1* ocorrem apenas no caso de relação linear perfeita , quando os pontos caem exatamente sobre a reta.
+
+---
+
+## Tipos de correlações
+
+<p> **Correlação de Pearson** para variáveis continuas
+<p> **Correlação de Spearman** para variáveis ordinais
+
+[Para saber mais clique aqui](http://rstudio-pubs-static.s3.amazonaws.com/10539_9a0d69971efd414d96bfb4b8cc20e76f.html#/6)
+<p>
+[Fonte: COEFICIENTES DE CORRELAÇÃO PARA VARIÁVEIS ORDINAIS E DICOTÔMICAS DERIVADOS DO COEFICIENTE LINEAR DE PEARSON](http://www.seer.ufu.br/index.php/cieng/issue/view/108)
+
+---
+
+## Correlação de Pearson
+### Coeficiente de correlação produto-momento de Pearson (r)
+<p> Mede a intensidade e a direção da relação entre duas variáveis contínuas
+## Interpretação do r
+### Valores de referência	Interpretação
+<p>  0 < r < 0,25	baixa ou nenhuma associação
+<p>  0,25 < r < 0,5	grau fraco de associação
+<p>  0,5 < r < 0,75	grau moderado de associação
+<p>  r > 0,75	grau excelente
+
+---
+
+## Correlação de Pearson
+### Fórmula
+
+```
+
+```
+$$r =\frac{COV(x,y)}{S_xS_y} $$
+  
+Onde:
+* COV = covariância
+* S = Desvio-padrão
+* Covariância é o número que reflete o grau em que duas variáveis variam juntas.
+
+```
+
+```
+  $$COV = \frac{\Sigma(X - \overline{X})(Y - \overline{Y})}{N - 1}$$
+
+---
+## Correlação entre idade e metabolismo
+```{r Coeficientes2, echo=TRUE, fig.width=8, fig.height=5}
+cor(datacor$idade, datacor$metabolismo)
+plot(datacor$idade, datacor$metabolismo)
+abline(lsfit(datacor$idade, datacor$metabolismo),col="darkred")
+```
+
+---
+
+# Correlação de Pearson
+Correlação entre as variáveis MPG e HP e as variáveis MPG e WT
+```{r Coeficientes3, echo=TRUE}
+data("mtcars")
+cor(mtcars$mpg,mtcars$hp)
+cor(mtcars$mpg,mtcars$wt)
+```
+
+---
+
+##  Correlação de Spearman
+```{r Coeficientes5, echo=TRUE}
+var1 = c(10, 9, 5, 6, 7)
+var2 = c(3, 6, 10, 5, 4)
+cor(var1,  var2, method="spearman")
+```
+
+---
+
+### Na prática, fazemos uma matriz com todas as correlações.
+```{r Coeficientes4, echo=TRUE, fig.width=7, fig.height=3}
+animais = c(10, 13, 14, 11, 10, 17, 10, 7, 12, 13)
+frutas = c(11, 11, 14, 9, 7, 14, 9, 4, 13, 12)
+fas = c(3, 20, 27, 26, 16, 41, 34, 13, 31, 38)
+dados.fv = data.frame(animais, frutas, fas)
+cor(dados.fv)  
+pairs(dados.fv)
+```
+
+---
+
+## Na prática, fazemos uma matriz com todas as correlações.
+```{r Coeficientes6, echo=TRUE}
+cor(mtcars[,c("disp","drat","hp","mpg","qsec","wt")])
+```  
+
+---
+
+# No entanto, hoje em dia podemos construir uma visualização de dados dessa matriz.
+
+---
+
+## Visualização da Matriz de Correlação
+```{r Coeficientes7, echo=FALSE}
+library(corrplot)
+M <- cor(mtcars[,c("disp","drat","hp","mpg","qsec","wt")])
+corrplot(M, method="circle")
+```
+
+---
+
+## Visualização da Matriz de Correlação
+```{r Coeficientes71, echo=TRUE}
+library(corrplot)
+M <- cor(mtcars[,c("disp","drat","hp","mpg","qsec","wt")])
+corrplot(M, method="circle")
+```
+
+---
+
+## Visualização da Matriz de Correlação
+```{r MC, echo=TRUE}
+corrplot(M, method="square")
+```
+
+---
+
+## Visualização da Matriz de Correlação
+```{r MC2, echo=TRUE}
+corrplot(M, method="number")
+```
+
+---
+
+## Visualização da Matriz de Correlação
+```{r MC3, echo=TRUE}
+corrplot(M, method="color")
+```
+
+---
+
+## Visualização da Matriz de Correlação
+```{r MC4, echo=TRUE}
+corrplot(M, method="pie")
+```
+
+---
+
+## Visualização da Matriz de Correlação:Criação de Grupos 
+```{r MC5, echo=TRUE}
+
+corrplot(M, order="hclust", addrect=2)
+```
+
+---
+
+## Visualização da Matriz de Correlação: Democratas e Republicanos
+```{r MC6, echo=TRUE}
+col3 <- colorRampPalette(c("red", "white", "blue")) 
+corrplot(M, order="hclust", addrect=2, col=col3(20))
+```
+
+---
+
+## Matriz de correlação Pós-Moderna
+```{r MC7, echo=TRUE}
+wb <- c("white","black")
+corrplot(M, order="hclust", addrect=2, col=wb, bg="gold2")
+```
+
+---
+
+## Matriz de Correlação Analítica (Versão 1)
+```{r MC8, echo=TRUE}  
+corrplot.mixed(M)
+```
+
+---
+
+## Matriz de Correlação Analítica  (Versão 2)
+```{r MC9, echo=TRUE}
+corrplot(M,addCoef.col=TRUE,number.cex=0.7)
+```
+
+---
+
+## Teste de Correlação
+$$H0: \rho =0 $$
+$$H1: \rho \neq 0 $$
+
+```{r MC10, echo=TRUE, warning=FALSE, message=FALSE}
+cor.test(mtcars$mpg,mtcars$hp, method="spearman")
+
+```
+
+---
+
+background-image: url(http://www.planwallpaper.com/cool-background#static/images/cool-background.jpg)
+background-position: 50% 50%
+class: center, bottom, inverse
+
+## Regressão linear no R
+
+---
+
+##  Regressão linear: objetivos
+* Predizer observações futuras
+* Avaliar o efeito as relações da variável independente (x) sobre uma variável dependente (y)
+* Descrever a estrutura dos dados
+
+## Modelo de Regressão Linear
+$Y = \beta_0 + \beta_1 x + \epsilon$
+
+Onde:
+Y = é o valor a ser predito
+
+$\beta_0$ = é o intercepto (valor quando x = 0)
+
+$\beta_1$ = é a inclinação da reta de regressão
+
+x = é o valor da variável preditora
+
+$\epsilon$ = é o erro
+
+---
+
+Objetivo: usar o R para  estimar, interpretar e gerar diagnósticos.
+<br>
+O comando no R para os modelos de regressão é o *lm* (**l**inear **m**odel). Esse comando estima um modelo de regressão com o método **Mínimos Quadrados Ordinários - MQO**. 
+<br>
+Além desse comando, também é importante conduzir um diagnóstico do modelo linear para avaliar os pressupostos.
+
+---
+
+
+## Modelo de regressão: exemplo 1
+```{r Reg, echo=TRUE}
+y = c(110, 120, 90, 70, 50, 80, 40, 40, 50, 30)
+xx = 1:10
+modelo = lm(y ~ xx)
+modelo
+```
+
+---
+
+## Modelo de regressão: exemplo 1
+```{r Reg0, echo=TRUE, fig.width=7, fig.height=5}
+plot(y ~ xx)
+abline(modelo, col=2, lty=2, lwd=2)
+legend("top", legend=c("valores observados", "valores ajustados"), lty=c(NA,2), col=c(1,2), lwd=1:2, bty="n", pch=c(1,NA))
+```
+
+---
+
+## Modelo de regressão: exemplo 2
+```{r Reg2, echo=TRUE}
+renda = c(1750, 1680, 1700, 1710, 1690, 1650, 1650, 1600, 1800, 1860)
+anosdeestudo = c(8, 7, 6, 6, 6, 5, 5, 5, 8, 9)
+modelo2 = lm(renda ~ anosdeestudo)
+```
+
+---
+
+```{r Reg21, echo=TRUE}
+plot(renda ~ anosdeestudo)
+abline(modelo2, col=2, lty=2, lwd=2)
+modelo2
+```
+
+---
+
+## Modelo de regressão: exemplo 3
+```{r Reg3, echo=TRUE}
+data("mtcars")
+modelo3 = lm(mpg ~ wt, data=mtcars)
+modelo3
+```
+
+---
+
+```{r Reg31, echo=TRUE}
+plot(mtcars$mpg ~ mtcars$wt)
+abline(modelo3, col=2, lty=2, lwd=2)
+legend("topright", legend=c("valores observados", "valores ajustados"), lty=c(NA,2), col=c(1,2), lwd=1:2, bty="n", pch=c(1,NA))
+```
+
+---
+
+## Modelo de regressão: exemplo 4
+```{r Reg4, echo=TRUE}
+modelo4 = lm(mpg ~ wt+cyl+disp+hp, data=mtcars)
+modelo4
+```
+
+---
+
+```{r Reg5, echo=TRUE}
+par(mfrow = c(2, 2))
+plot(mtcars$mpg ~ mtcars$wt)
+plot(mtcars$mpg ~ mtcars$cyl)
+plot(mtcars$mpg ~ mtcars$disp)
+plot(mtcars$mpg ~ mtcars$hp)
+```
+
+---
+
+## Resumo do Modelo Estimado
+
+$$H0: \beta_i =0 $$
+$$H1: \beta_i \neq 0 $$
+```{r Reg6, echo=TRUE}
+summary(modelo4)
+```
+
+---
+
+## Intervalo de confiança
+Para constuir um intervalo de confiança no R, devemos usar o comando confint (**conf**idence **int**erval in R)
+
+```{r Reg7, echo=TRUE}
+confint(modelo4, level=0.90)
+```
+
+Esse comando produz um intervalo de 90% de confiança, para trocar por um intervalo de 99% de confinça é necessário a modificação para *level=0.99*
+
+---
+
+## Diagnóstico do modelo de regressão
+Pressupostos e possíveis problemas
+
+1. Independência
+2. Homocedasticidade 
+3. Normalidade
+
+Multicolinearidade, Outliers e pontos influentes
+
+---
+
+## Independência (Ausência de autocorrelação)
+O teste de Durbin-Watson é utilizado para detectar a presença de autocorrelação (dependência) nos resíduos de uma análise de regressão.
+
+[Fonte](http://www.portalaction.com.br/analise-de-regressao/33-diagnostico-de-independencia)
+
+```{r Reg8, echo=TRUE, warning=FALSE, message=FALSE}
+library(lmtest)
+dwtest(modelo4)
+```
+
+---
+
+## Homocedasticidade (Mesma Variância dos Erros)
+
+Homocedasticidade é o termo para designar variância constante dos erros  para observações diferentes. Caso a suposição de homocedasticidade não seja válida, podemos listar alguns efeitos no ajuste do modelo:
+Os erros padrões dos estimadores, obtidos pelo Método dos Mínimos Quadrados, são incorretos e portanto a inferência estatística não é válida.
+[Fonte](http://www.portalaction.com.br/analise-de-regressao/32-diagnostico-de-homoscedasticidade)
+
+O **Breusch-Pagan** é utilizado para testar a hipótese nula de que as variâncias dos erros são iguais (homoscedasticidade).
+
+```{r Reg9, echo=TRUE}
+bptest(modelo4,studentize=FALSE)
+```
+
+
+---
+
+## Normalidade
+Um gráfico que indica se a distribuição dos resíduos é Normal é o **Quantile-Quantile Plot (QQPlot)**.  
+```{r Reg10a, echo=TRUE, fig.width=7, fig.height=5}
+qqnorm(modelo4$residuals)
+qqline(modelo4$residuals,col='red')
+densityPlot(modelo4$residuals, col="red",bw="SJ", adjust=1, kernel="gaussian")
+```
+
+
+---
+
+## Normalidade
+O teste de **Jarque-Bera** tem como hipótese nula a normalidade. 
+<br>
+Se o p-valor for menor do que 5% (ou 10%), p<0,05 (p<0,10), então rejeita-se a hipótese que os erros tem distribuição normal. 
+
+
+```{r Reg10, echo=TRUE}
+library(tseries)
+jarque.bera.test(modelo4$residuals)
+
+```
+
+---
+
+## Multicolinearidade, Outliers e pontos influentes
+
+A **Multicolinearidade** acontece quando as variáveis explicativas apresentam altas correlações entre si. A melhor estratégia para verificar a Multicolinearidade é por meio do **VIF (Variance Inflation Factor).**
+Como diagnóstico final, é uma boa ideia determinar quais são as observações que têm grande influência no modelo. A 
+[Distância de Cook](http://www.portalaction.com.br/analise-de-regressao/343-pontos-influentes) . mede a influência da observação i sobre todos n valores ajustados.  
+
+```{r Reg11, echo=TRUE}
+library(car)
+vif(modelo4)
+influenceIndexPlot(modelo4,vars="Cook",id.n=5)
+```
+
+---
+
